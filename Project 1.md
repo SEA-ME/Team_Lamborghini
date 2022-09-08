@@ -82,9 +82,9 @@ For WEB control to Donkeycar, we have to change interface options.
 
 <img src="https://user-images.githubusercontent.com/81483791/188982658-c4d246f0-c232-4fcd-b4d5-585ee1f20e8a.png"  width="400" height="300"/>
 <img src="https://user-images.githubusercontent.com/81483791/188982723-51f834f4-b2db-4736-a63a-034f4f7b6e4e.png"  width="400" height="300"/>
-- Legacy Camera  → Enable
-- SSH → Enable
-- VNC → Enable (for using VNC viewer)
+- Legacy Camera  → Enable.  
+- SSH → Enable.  
+- VNC → Enable (for using VNC viewer).  
 
 If you have picamera error, change Legacy Camera → enable .
 
@@ -121,12 +121,12 @@ elif match.group(1) == '**BCM2711**':
 
 - uninstall Adafruit_GPIO & re install Adafruit_GPIO
 
-`sudo pip3 uninstall Adafruit-PureIO
-sudo pip3 install Adafruit-PureIO`
+`sudo pip3 uninstall Adafruit-PureIO`.  
+`sudo pip3 install Adafruit-PureIO`
 
 But we can’t solve this problem.
 
-And also we can connect web control **https://<our raspberry pi ip>:8887**
+And also we can't connect web control **https://our raspberry pi ip:8887**
 
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
