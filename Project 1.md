@@ -237,3 +237,10 @@ it means that our connection between servo and RPI doesn't match.
 
 
 </details>
+
+
+
+<details markdown="1">
+<summary>9/12</summary>
+
+</details>
