@@ -243,6 +243,27 @@ it means that our connection between servo and RPI doesn't match.
 <details markdown="1">
 <summary>9/12</summary>
 
+![20220908_214956](https://user-images.githubusercontent.com/81306023/189630289-fcf25fd8-0032-4792-8fd9-b3200305baf9.jpg)
+We assume that connection error was not for driver, but for hardware, so we changed only the board(not the piracer, not the rasberry pi), and solve the problem.
+All the process was well running, and we can operate the piracer forward or backward.
+
+
+Also, we want to customize the key between joypad and Piracer,
+So, we have to create joystick creator wizard to type
+
+```
+cd ~/mycar
+donkey createjs
+```
+
+after the process, I completed my settings like this
+![Screenshot from 2022-09-12 11-21-20](https://user-images.githubusercontent.com/81306023/189642084-c931e215-f3a6-4525-af50-b3a9228a5898.png)
+
+
+
+
+P.S
+There was unexpected issue in cable. so always be careful!
 ![20220908_215318](https://user-images.githubusercontent.com/81306023/189629930-1a6afa75-1e7e-431e-9ef7-b43994ea8365.jpg)
 
 </details>
