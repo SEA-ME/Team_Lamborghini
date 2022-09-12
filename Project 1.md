@@ -1,3 +1,6 @@
+<details markdown="1">
+<summary>9/7</summary>
+
 ## Team  _'Lamborghini'_ made it!_
 
 First, Assemble our piracer with wiki guide.
@@ -162,3 +165,75 @@ After that, we found that Error about 'PCA9685' which there is no driver for 'se
 to solve, we codded below.
 
 ![2](https://user-images.githubusercontent.com/81306023/188978818-c4ed193f-ed97-48e4-8539-7bd4284d3abe.png)
+
+
+
+</details>
+
+
+<details markdown="1">
+<summary>9/8</summary>
+
+There were so many versions of Rasberry pi,
+Today, we planned that rather than down-grade the version of RPI4, watch one more guideline, and install the proper software.
+[DONKEY CAR]: <[https://docs.donkeycar.com/]>
+
+```
+donkey createcar --path ~/mycar
+````
+
+```
+cd ~/mycar
+nano myconfig.py
+```
+
+```
+sudo usermod -aG i2c $USER
+sudo reboot
+```
+
+
+```
+sudo i2cdetect -r -y 1
+```
+
+
+```
+sudo apt-get install -y i2c-tools
+sudo i2cdetect -y 1
+```
+--------------------------------------------------------------------------------------------
+every thing was going great to this project
+but we have a lot of time spending to solve this problem
+
+```
+# result must do like this
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:          -- -- -- -- -- -- -- -- -- -- -- -- --
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+40: 40 -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+70: 70 -- -- -- -- -- -- --
+```
+
+
+```
+# but our result was this
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:          -- -- -- -- -- -- -- -- -- -- -- -- --
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+70: -- -- -- -- -- -- -- --
+```
+
+it means that our connection between servo and RPI doesn't match.
+
+
+</details>
