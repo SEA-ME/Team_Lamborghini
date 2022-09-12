@@ -244,6 +244,7 @@ it means that our connection between servo and RPI doesn't match.
 <summary>9/12</summary>
 
 <img src="https://user-images.githubusercontent.com/81306023/189630289-fcf25fd8-0032-4792-8fd9-b3200305baf9.jpg"  width="400" height="300"/>
+
 We assume that connection error was not for driver, but for hardware, so we changed only the board(not the piracer, not the rasberry pi), and solve the problem.
 All the process was well running, and we can operate the piracer forward or backward.
 
