@@ -243,4 +243,6 @@ it means that our connection between servo and RPI doesn't match.
 <details markdown="1">
 <summary>9/12</summary>
 
+![20220908_215318](https://user-images.githubusercontent.com/81306023/189629930-1a6afa75-1e7e-431e-9ef7-b43994ea8365.jpg)
+
 </details>
