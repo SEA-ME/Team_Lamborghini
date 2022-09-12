@@ -257,13 +257,14 @@ donkey createjs
 ```
 
 after the process, I completed my settings like this
-<img src="https://user-images.githubusercontent.com/81306023/189642084-c931e215-f3a6-4525-af50-b3a9228a5898.png"  width="400" height="300"/>
+<img src="https://user-images.githubusercontent.com/81306023/189642084-c931e215-f3a6-4525-af50-b3a9228a5898.png"  width="700" height="400"/>
 
 
 
 
 P.S
 There was unexpected issue in cable. so always be careful!
+
 <img src="https://user-images.githubusercontent.com/81306023/189629930-1a6afa75-1e7e-431e-9ef7-b43994ea8365.jpg"  width="400" height="300"/>
 
 </details>
