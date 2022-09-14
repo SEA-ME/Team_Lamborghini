@@ -184,23 +184,20 @@ ifconfig
 sudo apt-get install can-utils
 ```
 
-Reference :
-
-@[https://www.beyondlogic.org/adding-can-controller-area-network-to-the-raspberry-pi/](https://www.beyondlogic.org/adding-can-controller-area-network-to-the-raspberry-pi/)
+[Reference](https://www.beyondlogic.org/adding-can-controller-area-network-to-the-raspberry-pi/)
 
 ---
 
 ## CAN communication between Raspberry Pi and Arduino
 
-Arduino C CAN Libraries :
 
-@[https://github.com/Seeed-Studio/Seeed_Arduino_CAN/tree/old](https://github.com/Seeed-Studio/Seeed_Arduino_CAN/tree/old)
+[Arduino C CAN Libraries](https://github.com/Seeed-Studio/Seeed_Arduino_CAN/tree/old)
 
-Raspberry Pi Python CAN :
 
-@[https://python-can.readthedocs.io/en/master/index.html](https://python-can.readthedocs.io/en/master/index.html)
 
-@[https://buildmedia.readthedocs.org/media/pdf/python-can/develop/python-can.pdf](https://buildmedia.readthedocs.org/media/pdf/python-can/develop/python-can.pdf)
+[Raspberry Pi Python CAN](https://python-can.readthedocs.io/en/master/index.html)
+
+[Raspberry Pi Python CAN pdf](https://buildmedia.readthedocs.org/media/pdf/python-can/develop/python-can.pdf)
 
 **IMPORTANT NOTE**
 
@@ -379,9 +376,8 @@ CAN.readMsgBuf(INT8U *len, INT8U *buf);
 
 ### 1. CAN-BUS Shield → Arduino UNO
 
-reference
 
-@[https://wiki.seeedstudio.com/CAN-BUS_Shield_V2.0/](https://wiki.seeedstudio.com/CAN-BUS_Shield_V2.0/)
+[Reference](https://wiki.seeedstudio.com/CAN-BUS_Shield_V2.0/)
 
 ![Untitled 2](https://user-images.githubusercontent.com/81483791/190277565-3b7267fc-bd9c-4a44-a5bb-af06bcfe240c.png)
 1. **DB9 Interface** - to connect to OBDII Interface via a DBG-OBD Cable.
@@ -403,4 +399,4 @@ reference
 
 reference
 
-@[https://wiki.seeedstudio.com/2-Channel-CAN-BUS-FD-Shield-for-Raspberry-Pi/](https://wiki.seeedstudio.com/2-Channel-CAN-BUS-FD-Shield-for-Raspberry-Pi/)
+[Reference](https://wiki.seeedstudio.com/2-Channel-CAN-BUS-FD-Shield-for-Raspberry-Pi/)
