@@ -1,6 +1,13 @@
+# project 2
+
+[RPM checker](#rpm-checker)
+
+[Temperature sensor](#temperature-sensor)
+
+
+
 ## RPM checker
 
-### 3d model
 1. to check rpm, we need to attach wheels, and arduino nano sensor.
 
 <img src="https://user-images.githubusercontent.com/81306023/190121255-4d449583-0499-4f3f-b1a4-3804c7569b7d.jpg"  width="400" height="500"/>     ------------------>     <img src="https://user-images.githubusercontent.com/81306023/190121265-f4e0e9fd-f370-42f1-b2d1-879d1a3f0ddc.jpg"  width="400" height="500"/> 
@@ -78,6 +85,7 @@ void loop()
 -----------------------------------------------------------------------------------------------
 ## Temperature sensor
 
+
 We have dht11 model below
 
 <img src="https://user-images.githubusercontent.com/81306023/190211536-25904ca5-c3f2-4d62-b54c-80ba8c51b2cf.PNG"  width="400" height="400"/> 
@@ -133,6 +141,9 @@ void loop() {
 and we done the installation
 
 <img src="https://user-images.githubusercontent.com/81306023/190212444-6015ddff-819b-4497-b27b-7b4b6ab989d3.jpg"  width="400" height="300"/> 
+
+
+
 
 ---------------------------------------------------------------------
 
