@@ -1,4 +1,4 @@
-# project 2
+# Project 2
 
 [RPM checker](#rpm-checker)
 
