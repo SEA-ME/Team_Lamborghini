@@ -135,3 +135,272 @@ and we done the installation
 <img src="https://user-images.githubusercontent.com/81306023/190212444-6015ddff-819b-4497-b27b-7b4b6ab989d3.jpg"  width="400" height="300"/> 
 
 
+## ****Adding CAN to the Raspberry PI****
+
+But this way, we can send Raspberry pi to Arduino
+
+![Untitled](https://user-images.githubusercontent.com/81483791/190277626-e53087dd-5832-48ee-a7ab-476482f02af9.png)
+### 1. Add the following line to your /boot/config.txt file
+
+- oscillator = 8000000 or 16000000
+- interrupt = 25 (We have connected the INT pin to GPIO25)
+
+```python
+sudo vi /boot/config.txt
+dtoverlay=mcp2515-can0,oscillator=8000000,interrupt=25
+```
+
+### 2. Reboot
+
+### 3. Bring up the CAN interface using
+
+```python
+sudo /sbin/ip link set can0 up type can bitrate 500000
+```
+
+### 4. Edit your /etc/network/interfaces file
+
+To automatically bring up the interface on boot
+
+```python
+auto can0
+iface can0 inet manual
+    pre-up /sbin/ip link set can0 type can bitrate 500000 triple-sampling on restart-ms 100
+    up /sbin/ifconfig can0 up
+    down /sbin/ifconfig can0 down
+```
+
+### 5. Check connecting can
+
+```python
+ifconfig
+```
+
+![Untitled 1](https://user-images.githubusercontent.com/81483791/190277382-a9fceb8e-f0e4-43a7-8806-39178701589b.png)
+
+### 6. CAN-utils
+
+```python
+sudo apt-get install can-utils
+```
+
+Reference :
+
+@[https://www.beyondlogic.org/adding-can-controller-area-network-to-the-raspberry-pi/](https://www.beyondlogic.org/adding-can-controller-area-network-to-the-raspberry-pi/)
+
+---
+
+## CAN communication between Raspberry Pi and Arduino
+
+Arduino C CAN Libraries :
+
+@[https://github.com/Seeed-Studio/Seeed_Arduino_CAN/tree/old](https://github.com/Seeed-Studio/Seeed_Arduino_CAN/tree/old)
+
+Raspberry Pi Python CAN :
+
+@[https://python-can.readthedocs.io/en/master/index.html](https://python-can.readthedocs.io/en/master/index.html)
+
+@[https://buildmedia.readthedocs.org/media/pdf/python-can/develop/python-can.pdf](https://buildmedia.readthedocs.org/media/pdf/python-can/develop/python-can.pdf)
+
+**IMPORTANT NOTE**
+
+> Bitrate of RPI & UNO is 500000(set in program)
+> 
+> 
+> Clock frequency of RPI & UNO is 8Mhz(set in config file and program)
+> 
+
+## Arduino C code
+
+### CAN_RX.ino
+
+```python
+#include <SPI.h>
+#include "mcp_can.h"
+
+const int spiCSPin = 10;
+const int ledPin = 2;
+boolean ledON = 1;
+
+MCP_CAN CAN(spiCSPin);
+
+void setup()
+{
+    Serial.begin(115200);
+    pinMode(ledPin,OUTPUT);
+
+    while (CAN_OK != CAN.begin(CAN_500KBPS,MCP_8MHz))
+    {
+        Serial.println("CAN BUS Init Failed");
+        delay(100);
+    }
+    Serial.println("CAN BUS  Init OK!");
+}
+
+void loop()
+{
+    unsigned char len = 0;
+    unsigned char buf[8];
+
+    if(CAN_MSGAVAIL == CAN.checkReceive())
+    {
+        CAN.readMsgBuf(&len, buf);
+
+        unsigned long canId = CAN.getCanId();
+
+        Serial.println("-----------------------------");
+        Serial.print("Data from ID: 0x");
+        Serial.println(canId, HEX);
+
+        for(int i = 0; i<len; i++)
+        {
+            Serial.print(buf[i]);
+            Serial.print("\t");
+            if(ledON && i==0)
+            {
+
+                digitalWrite(ledPin, buf[i]);
+                ledON = 0;
+                delay(500);
+            }
+            else if((!(ledON)) && i==4)
+            {
+
+                digitalWrite(ledPin, buf[i]);
+                ledON = 1;
+            }
+        }
+        Serial.println();
+    }
+}
+```
+
+### CAN_TX.ino
+
+```python
+#include <SPI.h>
+#include <mcp_can.h>
+
+const int spiCSPin = 10;
+int ledHIGH    = 1;
+int ledLOW     = 0;
+
+MCP_CAN CAN(spiCSPin);
+
+void setup()
+{
+    Serial.begin(115200);
+
+    while (CAN_OK != CAN.begin(CAN_500KBPS,MCP_8MHz))
+    {
+        Serial.println("CAN BUS init Failed");
+        delay(100);
+    }
+    Serial.println("CAN BUS Shield Init OK!");
+}
+
+unsigned char stmp[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+    
+void loop()
+{   
+  Serial.println("In loop");
+  CAN.sendMsgBuf(0x43, 0, 8, stmp);
+  delay(1000);
+}
+```
+
+## Raspberry PI Python code
+
+### can_basic_send.py
+
+```python
+import time
+import can
+
+bustype = 'socketcan'
+channel = 'can0'
+bus = can.interface.Bus(channel=channel, bustype=bustype,bitrate=500000)
+
+msg = can.Message(arbitration_id=0xc0ffee, data=[0, 1, 3, 1, 4, 1], is_extended_id=False)
+while True:
+	bus.send(msg)
+	time.sleep(1)
+```
+
+### can_basic_recv.py
+
+```python
+import can
+import time
+
+can_interface = 'can0'
+bus = can.interface.Bus(can_interface, bustype='socketcan',bitrate=500000)
+
+while True:
+	message = bus.recv()
+	print(message)
+#for msg in bus:
+	#print(msg.data)
+```
+
+If you have “No buffer space available ” ERROR message, Type following
+
+```python
+sudo ifconfig can0 txqueuelen 1000
+```
+
+- Send data
+
+```python
+CAN.sendMsgBuf(INT32U id, INT8U ext, INT8U len, INT8U *buf);
+```
+
+**id** represents where the data come from.
+
+**ext** represents the status of the frame. '0' means standard frame. '1' means extended frame.
+
+**len** represents the length of this frame.
+
+**buf** is the content of this message.
+
+- Receive data
+
+```python
+CAN.readMsgBuf(INT8U *len, INT8U *buf);
+```
+
+**len** represents the data length.
+
+**buf** is where you store the data.
+
+---
+
+## CAN Module
+
+### 1. CAN-BUS Shield → Arduino UNO
+
+reference
+
+@[https://wiki.seeedstudio.com/CAN-BUS_Shield_V2.0/](https://wiki.seeedstudio.com/CAN-BUS_Shield_V2.0/)
+
+![Untitled 2](https://user-images.githubusercontent.com/81483791/190277565-3b7267fc-bd9c-4a44-a5bb-af06bcfe240c.png)
+1. **DB9 Interface** - to connect to OBDII Interface via a DBG-OBD Cable.
+2. **V_OBD** - It gets power from OBDII Interface (from DB9)
+3. **Led Indicator**:
+    - **PWR**: power
+    - **TX**: blink when the data is sending
+    - **RX**: blink when there's data receiving
+    - **INT**: data interrupt
+4. **Terminal** - CAN_H and CAN_L
+5. **Arduino UNO pin out**
+6. **Serial Grove connector**
+7. **I2C Grove connector**
+8. **ICSP pins**
+9. **IC** - MCP2551, a high-speed CAN transceiver ([datasheet](https://files.seeedstudio.com/wiki/CAN_BUS_Shield/resource/Mcp2551.pdf))
+10. **IC** - MCP2515, stand-alone CAN controller with SPI interface ([datasheet](https://files.seeedstudio.com/wiki/CAN_BUS_Shield/resource/MCP2515.pdf))
+
+### 2. CAN BUS FD Shield → Raspberry PI
+
+reference
+
+@[https://wiki.seeedstudio.com/2-Channel-CAN-BUS-FD-Shield-for-Raspberry-Pi/](https://wiki.seeedstudio.com/2-Channel-CAN-BUS-FD-Shield-for-Raspberry-Pi/)
