@@ -4,6 +4,11 @@
 
 [Temperature sensor](#temperature-sensor)
 
+[Adding CAN to the Raspberry PI](#adding-can-to-the-raspberry-pi)
+
+[CAN communication between Raspberry Pi and Arduino](#can-communication-between-raspberry-pi-and-arduino)
+
+[CAN Module](#can-module)
 
 
 ## RPM checker
