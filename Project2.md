@@ -134,6 +134,7 @@ and we done the installation
 
 <img src="https://user-images.githubusercontent.com/81306023/190212444-6015ddff-819b-4497-b27b-7b4b6ab989d3.jpg"  width="400" height="300"/> 
 
+---------------------------------------------------------------------
 
 ## ****Adding CAN to the Raspberry PI****
 
