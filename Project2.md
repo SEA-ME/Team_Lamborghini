@@ -8,8 +8,13 @@
 
 [CAN communication between Raspberry Pi and Arduino](#can-communication-between-raspberry-pi-and-arduino)
 
+[CAN BUS (FD) Hat](#solution.-CAN-BUS-(FD)-Hat)
+
 [CAN Module](#can-module)
 
+[OLED display](#1-solution.-OLED-display-with-donkeycar)
+
+[How to Calculate battery level](#How-to-Calculate-battery-level)
 
 ## RPM checker
 
@@ -357,9 +362,6 @@ while True:
 	#print(msg.data)
 ```
 
-![Screenshot from 2022-09-13 22-32-31](https://user-images.githubusercontent.com/81483791/190278338-3602f5fd-6602-4507-a21e-9464087d5da5.png)
-
-
 If you have “No buffer space available ” ERROR message, Type following
 
 ```python
@@ -468,7 +470,6 @@ If you follow step 7, you need to reboot.
 
 ![%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-09-20_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_7 03 22](https://user-images.githubusercontent.com/81483791/191598402-d9627002-3ca0-4bba-830e-bde85185d279.png)
 
-![스크린샷 2022-09-20 오후 7.03.22.png](CAN%2051775cafbc8f4c6cb328dbab50d490e5/%25E1%2584%2589%25E1%2585%25B3%25E1%2584%258F%25E1%2585%25B3%25E1%2584%2585%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2589%25E1%2585%25A3%25E1%2586%25BA_2022-09-20_%25E1%2584%258B%25E1%2585%25A9%25E1%2584%2592%25E1%2585%25AE_7.03.22.png)
 ### 1. Set CAN protocol
 
 I connectecd like this picture,
@@ -622,3 +623,93 @@ CAN.readMsgBuf(INT8U *len, INT8U *buf);
 reference
 
 [Reference](https://wiki.seeedstudio.com/2-Channel-CAN-BUS-FD-Shield-for-Raspberry-Pi/)
+
+---
+
+## 1 solution. OLED display with donkeycar
+
+Edit config.py
+
+`USE_SSD1306_128_32 = True`
+
+```jsx
+#SSD1306_128_32
+USE_SSD1306_128_32 = True    # Enable the SSD_1306 OLED Display
+SSD1306_128_32_I2C_ROTATION = 0 # 0 = text is right-side up, 1 = rotated 90 degrees clockwise, 2 = 180 degrees (flipped), 3 = 270 degrees
+SSD1306_RESOLUTION = 1 # 1 = 128x32; 2 = 128x64
+```
+
+![Untitled](https://user-images.githubusercontent.com/81483791/191599241-a9737d41-02e5-4d1f-a998-6aa1723cdabc.png)
+
+---
+
+## 2 solution. OLED display with pi-display
+
+It is different from the first solution  If you want second solution,  `Please USE_SSD1306_128_32 = False`
+
+### 1. Open terminal and commend following
+
+```jsx
+cd ~
+git clone https://github.com/waveshare/pi-display
+cd pi-display
+sudo ./install.sh
+```
+
+### 2. Install
+
+```jsx
+sudo pip3 install flask
+```
+
+*CHECK POINT* 
+
+`Enable ‘I2C’`
+
+```jsx
+sudo raspi-config
+# -> activate 'Interface Options' -> 'I2C'
+```
+
+### 3. Execute python code
+
+![%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-09-21_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_7 42 17](https://user-images.githubusercontent.com/81483791/191599279-edfef2dc-9720-4af1-9e94-de0e6a6970c8.png)
+
+```jsx
+cd pidisplay
+python display_server.py
+```
+
+If you have a problem ‘line 8’ utils,
+
+You should check it has ‘ . ’ in front of utils
+
+`from .utils`  → `from utils`
+
+---
+
+## How to Calculate battery level
+
+![%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-09-21_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_7 48 21](https://user-images.githubusercontent.com/81483791/191600232-0415b88d-431f-4bc5-b968-36e97c4a30ac.png)
+8.4V, 18650 battery × 4
+
+(two in parallel, two in series)
+
+- series → **Voltage rise**
+- parallel →**Ampere rise**
+
+하나당 4.2V를 가지고 있으므로 2개를 직렬연결로 8.4V이고 
+
+만약 하나당 3A 라면 병렬연결로 6A 가 됨.
+
+4.2V = full charge
+
+3V = discharge
+
+nominal voltage 3.6~3.7V
+
+### battery level = ( voltage - 6 ) /2.4 *100
+
+If voltage is 8.4V, battery level is 100% 
+
+If voltage is 6V, battery level is 0%
