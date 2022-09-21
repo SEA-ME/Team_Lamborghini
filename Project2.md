@@ -365,6 +365,208 @@ If you have “No buffer space available ” ERROR message, Type following
 ```python
 sudo ifconfig can0 txqueuelen 1000
 ```
+### 7.  Wrong data
+
+OUTPUT :
+
+unsigned char stmp[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+![Untitled 1](https://user-images.githubusercontent.com/81483791/191597929-d1bed4a2-b458-45c0-a673-d6bfd3254a4e.png)
+
+
+I can receive but it is wrong data so I tried to use CAN cus hat
+
+---
+
+## Solution. CAN BUS (FD) Hat
+
+[Reference](https://wiki.seeedstudio.com/2-Channel-CAN-BUS-FD-Shield-for-Raspberry-Pi/)
+
+### 1. Connect CAN BUS(FD) Hat
+
+### 2. Edit config.txt file and Add following
+
+```jsx
+sudo vim /boot/config.txt
+dtoverlay=seeed-can-fd-hat-v2
+```
+
+### 3. Reboot
+
+### 4. Initialized
+
+```jsx
+dmesg | grep spi
+```
+
+OUTPUT:
+
+```jsx
+[    5.848080] spi_master spi0: will run message pump with realtime priority
+[    5.861055] mcp251xfd spi0.1 can0: MCP2518FD rev0.0 (-RX_INT -MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:20.00MHz r:17.00MHz e:16.66MHz) successfully initialized.
+[    5.873396] mcp251xfd spi0.0 can1: MCP2518FD rev0.0 (-RX_INT -MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:20.00MHz r:17.00MHz e:16.66MHz) successfully initialized.
+```
+
+### 5. Check ifconfig list
+
+```jsx
+ifconfig -a
+```
+
+OUTPUT:
+
+
+![Untitled 2](https://user-images.githubusercontent.com/81483791/191598262-e86fabbc-7310-4d48-baba-837fd5776912.png)
+
+### 6. Install CAN tools
+
+```jsx
+sudo apt-get install can-utils
+pip3 install python-can
+```
+
+### 7.  Send & Recv test with 2-channel CAN FD
+
+![%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-09-20_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_6 32 59](https://user-images.githubusercontent.com/81483791/191598140-cf87a8eb-8dcb-43ac-a327-47b2519413b5.png)
+
+### 1.  Connect the channels
+
+0_L <===> 1_L
+
+0_H <===> 1_H
+
+### 2. Set the CAN protocol
+
+```jsx
+sudo ip link set can0 up type can bitrate 1000000   dbitrate 8000000 restart-ms 1000 berr-reporting on fd on
+sudo ip link set can1 up type can bitrate 1000000   dbitrate 8000000 restart-ms 1000 berr-reporting on fd on
+ 
+sudo ifconfig can0 txqueuelen 65536
+sudo ifconfig can1 txqueuelen 65536
+```
+
+### 3. Open two windows
+
+```jsx
+#send data
+cangen can0 -mv
+```
+
+```jsx
+#dump data
+candump can1
+```
+
+OUTPUT : 
+![Untitled 3](https://user-images.githubusercontent.com/81483791/191598299-05bf838a-075e-4825-b96d-cfbbbdbaa751.png)
+![Untitled 4](https://user-images.githubusercontent.com/81483791/191598322-bddc38d3-ca99-42e3-a1c3-9c453b7a3d9e.png)
+
+
+
+### 8. Raspberry pi to Arduino CAN - CAN communication
+
+If you follow step 7, you need to reboot.
+
+![%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-09-20_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_7 03 22](https://user-images.githubusercontent.com/81483791/191598402-d9627002-3ca0-4bba-830e-bde85185d279.png)
+
+![스크린샷 2022-09-20 오후 7.03.22.png](CAN%2051775cafbc8f4c6cb328dbab50d490e5/%25E1%2584%2589%25E1%2585%25B3%25E1%2584%258F%25E1%2585%25B3%25E1%2584%2585%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2589%25E1%2585%25A3%25E1%2586%25BA_2022-09-20_%25E1%2584%258B%25E1%2585%25A9%25E1%2584%2592%25E1%2585%25AE_7.03.22.png)
+### 1. Set CAN protocol
+
+I connectecd like this picture,
+
+Arduino CAN_L <===> Raspberry pi 0_L
+
+Arduino CAN_H <===> Raspberry pi 0_H
+
+```jsx
+sudo ip link set can1 up type can bitrate 500000
+```
+
+### 2. Check details
+
+```jsx
+ip -details link show can0
+```
+
+### Arduino Code (Send data)
+
+```jsx
+// demo: CAN-BUS Shield, send data
+// loovee@seeed.cc
+ 
+#include <mcp_can.h>
+#include <SPI.h>
+ 
+// the cs pin of the version after v1.1 is default to D9
+// v0.9b and v1.0 is default D10
+const int SPI_CS_PIN = 9;
+ 
+MCP_CAN CAN(SPI_CS_PIN);                                    // Set CS pin
+ 
+void setup()
+{
+    Serial.begin(115200);
+ 
+    while (CAN_OK != CAN.begin(CAN_500KBPS))              // init can bus : baudrate = 500k
+    {
+        Serial.println("CAN BUS Shield init fail");
+        Serial.println(" Init CAN BUS Shield again");
+        delay(100);
+    }
+    Serial.println("CAN BUS Shield init ok!");
+}
+ 
+unsigned char stmp[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+void loop()
+{
+    //send data:  id = 0x00, standrad frame, data len = 8, stmp: data buf
+    stmp[7] = stmp[7]+1;
+    if(stmp[7] == 100)
+    {
+        stmp[7] = 0;
+        stmp[6] = stmp[6] + 1;
+ 
+        if(stmp[6] == 100)
+        {
+            stmp[6] = 0;
+            stmp[5] = stmp[6] + 1;
+        }
+    }
+ 
+    CAN.sendMsgBuf(0x00, 0, 8, stmp);
+    delay(100);                       // send data per 100ms
+}
+// END FILE
+```
+
+### Raspberry pi Code (Recv data)
+
+1. Open terminal and following:
+
+```jsx
+candump can0
+```
+
+or 
+
+1. Make a python file
+
+```jsx
+import can
+ 
+can_interface = 'can0'
+bus = can.interface.Bus(can_interface, bustype='socketcan')
+while True:
+    message = bus.recv(1.0) # Timeout in seconds.
+    if message is None:
+            print('Timeout occurred, no message.')
+    print(message)
+```
+
+OUTPUT:
+
+unsigned char stmp[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+
+![Untitled 5](https://user-images.githubusercontent.com/81483791/191598481-2ec66e79-b758-436b-b04c-f7278e466990.png)
 
 - Send data
 
