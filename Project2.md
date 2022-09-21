@@ -430,13 +430,13 @@ pip3 install python-can
 
 ![%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-09-20_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_6 32 59](https://user-images.githubusercontent.com/81483791/191598140-cf87a8eb-8dcb-43ac-a327-47b2519413b5.png)
 
-### 1.  Connect the channels
+1.  Connect the channels
 
 0_L <===> 1_L
 
 0_H <===> 1_H
 
-### 2. Set the CAN protocol
+2. Set the CAN protocol
 
 ```jsx
 sudo ip link set can0 up type can bitrate 1000000   dbitrate 8000000 restart-ms 1000 berr-reporting on fd on
@@ -446,7 +446,7 @@ sudo ifconfig can0 txqueuelen 65536
 sudo ifconfig can1 txqueuelen 65536
 ```
 
-### 3. Open two windows
+3. Open two windows
 
 ```jsx
 #send data
@@ -470,7 +470,7 @@ If you follow step 7, you need to reboot.
 
 ![%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-09-20_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_7 03 22](https://user-images.githubusercontent.com/81483791/191598402-d9627002-3ca0-4bba-830e-bde85185d279.png)
 
-### 1. Set CAN protocol
+1. Set CAN protocol
 
 I connectecd like this picture,
 
@@ -482,7 +482,7 @@ Arduino CAN_H <===> Raspberry pi 0_H
 sudo ip link set can1 up type can bitrate 500000
 ```
 
-### 2. Check details
+2. Check details
 
 ```jsx
 ip -details link show can0
@@ -549,7 +549,7 @@ candump can0
 
 or 
 
-1. Make a python file
+2. Make a python file
 
 ```jsx
 import can
@@ -691,16 +691,11 @@ You should check it has ‘ . ’ in front of utils
 ## How to Calculate battery level
 
 ![%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-09-21_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_7 48 21](https://user-images.githubusercontent.com/81483791/191600232-0415b88d-431f-4bc5-b968-36e97c4a30ac.png)
-8.4V, 18650 battery × 4
-
-(two in parallel, two in series)
+8.4V, 18650 battery × 4 (two in parallel, two in series)
 
 - series → **Voltage rise**
 - parallel →**Ampere rise**
 
-하나당 4.2V를 가지고 있으므로 2개를 직렬연결로 8.4V이고 
-
-만약 하나당 3A 라면 병렬연결로 6A 가 됨.
 
 4.2V = full charge
 
